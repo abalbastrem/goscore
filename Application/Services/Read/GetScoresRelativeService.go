@@ -7,18 +7,18 @@ import (
 	repo "Goscore/Infrastructure/Repos"
 )
 
-type GetScoresAbsoluteService struct {
-	Request requests_read.GetScoresAbsoluteRequest
+type GetScoresRelativeService struct {
+	Request requests_read.GetScoresRelativeRequest
 }
 
-func ExecAbsolute(s GetScoresAbsoluteService) map[int]domain.UserScore {
+func ExecRelative(s GetScoresRelativeService) map[int]domain.UserScore {
 	userScoreList := repo.GetScores()
 	utils.Sort(userScoreList)
 	userScoreMap := make(map[int]domain.UserScore)
 	for index, userScore := range userScoreList {
-		userScoreMap[index+1] = userScore
-		if len(userScoreMap) == s.Request.Rank {
-			break
+		if index >= s.Request.Rank-s.Request.NRelatives &&
+			index <= s.Request.Rank+s.Request.NRelatives {
+			userScoreMap[index] = userScore
 		}
 	}
 

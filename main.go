@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	fmt.Println("MAIN")
+	fmt.Println("START")
 	populate()
 	rough()
 
@@ -26,25 +26,23 @@ func main() {
 }
 
 func populate() {
-	fmt.Println("populating database")
+	fmt.Print("populating database...")
 	for i := 1; i <= 1000; i++ {
 		score := rand.Int31()
 		userScore := domain.UserScore{User: i, Score: int(score)}
 		repo.SaveScore(userScore)
 	}
-	// fmt.Println(repo.UserScores)
-
+	fmt.Println(" DONE")
 }
 
 func rough() {
-	var userScoreList []domain.UserScore
-	for user, score := range repo.UserScores {
-		userScoreList = append(userScoreList, domain.UserScore{User: user, Score: score})
-	}
+	userScoreList := repo.GetScores()
 	utils.Sort(userScoreList)
 	userScoreMap := make(map[int]domain.UserScore)
 	for index, userScore := range userScoreList {
-		userScoreMap[index+1] = userScore
+		if index >= 120-3 &&
+			index <= 120+3 {
+			userScoreMap[index] = userScore
+		}
 	}
-	// fmt.Println(userScoreMap)
 }

@@ -119,69 +119,77 @@ func TestGetAbsoluteTop500(t *testing.T) {
 	}
 }
 
-// func TestGetRelativeAndThereAreEnoughRelatives(t *testing.T) {
-// 	rank := 120
-// 	nRelatives := 3
-// 	params := "?rank=" + strconv.Itoa(rank) + "&n_relatives=" + strconv.Itoa(nRelatives)
-// 	url := controller_read.HOST + controller_read.URL_FETCH_RELATIVE + params
+func TestGetRelativeAndThereAreEnoughRelatives(t *testing.T) {
+	rank := 120
+	nRelatives := 3
+	params := "?rank=" + strconv.Itoa(rank) + "&n_relatives=" + strconv.Itoa(nRelatives)
+	url := controller_read.HOST + controller_read.URL_FETCH_RELATIVE + params
 
-// 	res, err := client.Get(url)
-// 	if err != nil {
-// 		t.Error(err)
-// 	}
-// 	defer res.Body.Close()
+	res, err := client.Get(url)
+	if err != nil {
+		t.Error(err)
+	}
+	defer res.Body.Close()
 
-// 	body, err := io.ReadAll(res.Body)
-// 	var scores topScores
-// 	json.Unmarshal(body, &scores)
+	body, err := io.ReadAll(res.Body)
+	var scores topScores
+	json.Unmarshal(body, &scores)
 
-// 	currTotal := scores[rank].Score
-// 	for i := rank; i <= rank+nRelatives; i++ {
-// 		if scores[i].Score < currTotal {
-// 			t.Error("ERROR scores were not fetched in the correct order")
-// 		}
-// 		currTotal = scores[i].Score
-// 	}
-// 	currTotal = scores[rank].Score
-// 	for i := rank; i >= rank-nRelatives; i-- {
-// 		if scores[i].Score > currTotal {
-// 			t.Error("ERROR scores were not fetched in the correct order")
-// 		}
-// 		currTotal = scores[i].Score
-// 	}
-// }
+	if (nRelatives*2)+1 != len(scores) {
+		t.Errorf("ERROR wrong number of scores fetched. Expected '%d', got '%d'", (nRelatives*2)+1, len(scores))
+	}
 
-// func TestGetRelativeAndThereAreNotEnoughRelatives(t *testing.T) {
-// 	rank := 998
-// 	nRelatives := 5
-// 	params := "?rank=" + strconv.Itoa(rank) + "&n_relatives=" + strconv.Itoa(nRelatives)
-// 	url := controller_read.HOST + controller_read.URL_FETCH_RELATIVE + params
+	currTotal := scores[rank].Score
+	for i := rank; i <= rank+nRelatives; i++ {
+		if scores[i].Score > currTotal {
+			t.Error("ERROR_1 scores were not fetched in the correct order")
+		}
+		currTotal = scores[i].Score
+	}
+	currTotal = scores[rank].Score
+	for i := rank; i >= rank-nRelatives; i-- {
+		if scores[i].Score < currTotal {
+			t.Error("ERROR_2 scores were not fetched in the correct order")
+		}
+		currTotal = scores[i].Score
+	}
+}
 
-// 	res, err := client.Get(url)
-// 	if err != nil {
-// 		t.Error(err)
-// 	}
-// 	defer res.Body.Close()
+func TestGetRelativeAndThereAreNotEnoughRelatives(t *testing.T) {
+	rank := 998
+	nRelatives := 5
+	params := "?rank=" + strconv.Itoa(rank) + "&n_relatives=" + strconv.Itoa(nRelatives)
+	url := controller_read.HOST + controller_read.URL_FETCH_RELATIVE + params
 
-// 	body, err := io.ReadAll(res.Body)
-// 	var scores topScores
-// 	json.Unmarshal(body, &scores)
+	res, err := client.Get(url)
+	if err != nil {
+		t.Error(err)
+	}
+	defer res.Body.Close()
 
-// 	currTotal := scores[rank].Score
-// 	for i := rank; i <= rank+nRelatives; i++ {
-// 		if scores[i].Score < currTotal {
-// 			t.Error("ERROR scores were not fetched in the correct order")
-// 		}
-// 		currTotal = scores[i].Score
-// 	}
-// 	currTotal = scores[rank].Score
-// 	for i := rank; i >= rank-nRelatives; i-- {
-// 		if scores[i].Score > currTotal {
-// 			t.Error("ERROR scores were not fetched in the correct order")
-// 		}
-// 		currTotal = scores[i].Score
-// 	}
-// }
+	body, err := io.ReadAll(res.Body)
+	var scores topScores
+	json.Unmarshal(body, &scores)
+
+	if (nRelatives*2)+1 <= len(scores) {
+		t.Errorf("ERROR wrong number of scores fetched. Expected '%d', should be larger than got '%d'", (nRelatives*2)+1, len(scores))
+	}
+
+	currTotal := scores[rank].Score
+	for i := rank; i <= rank+nRelatives; i++ {
+		if scores[i].Score > currTotal {
+			t.Error("ERROR_1 scores were not fetched in the correct order")
+		}
+		currTotal = scores[i].Score
+	}
+	currTotal = scores[rank].Score
+	for i := rank; i >= rank-nRelatives; i-- {
+		if scores[i].Score < currTotal {
+			t.Error("ERROR_2 scores were not fetched in the correct order")
+		}
+		currTotal = scores[i].Score
+	}
+}
 
 // // WRITE
 // func TestPostFirstSaveScoreAbsolute(t *testing.T) {

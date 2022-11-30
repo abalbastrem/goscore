@@ -22,13 +22,25 @@ func HelloWorld(w http.ResponseWriter, r *http.Request) {
 func GetAbsoluteTop(w http.ResponseWriter, r *http.Request) {
 	rankParam := r.URL.Query().Get("rank")
 	rank, _ := strconv.Atoi(rankParam)
+
 	request := requests_read.GetScoresAbsoluteRequest{Rank: rank}
 	service := services_read.GetScoresAbsoluteService{Request: request}
-	userScoreMap := services_read.Exec(service)
+
+	userScoreMap := services_read.ExecAbsolute(service)
 	jsonUserScores, _ := json.Marshal(userScoreMap)
 	fmt.Fprintf(w, string(jsonUserScores))
 }
 
 func GetRelatives(w http.ResponseWriter, r *http.Request) {
+	rankParam := r.URL.Query().Get("rank")
+	nRelativesParam := r.URL.Query().Get("n_relatives")
+	rank, _ := strconv.Atoi(rankParam)
+	nRelatives, _ := strconv.Atoi(nRelativesParam)
 
+	request := requests_read.GetScoresRelativeRequest{Rank: rank, NRelatives: nRelatives}
+	service := services_read.GetScoresRelativeService{Request: request}
+
+	userScoreMap := services_read.ExecRelative(service)
+	jsonUserScores, _ := json.Marshal(userScoreMap)
+	fmt.Fprintf(w, string(jsonUserScores))
 }
