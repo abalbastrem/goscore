@@ -1,9 +1,8 @@
 package controllers_read
 
 import (
-	utils "Goscore/Application/Utils"
-	domain "Goscore/Domain"
-	repo "Goscore/Infrastructure/Repos"
+	requests_read "Goscore/Application/Requests/Read"
+	services_read "Goscore/Application/Services/Read"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -23,18 +22,9 @@ func HelloWorld(w http.ResponseWriter, r *http.Request) {
 func GetAbsoluteTop(w http.ResponseWriter, r *http.Request) {
 	rankParam := r.URL.Query().Get("rank")
 	rank, _ := strconv.Atoi(rankParam)
-	var userScoreList []domain.UserScore
-	for user, score := range repo.UserScores {
-		userScoreList = append(userScoreList, domain.UserScore{User: user, Score: score})
-	}
-	utils.Sort(userScoreList)
-	userScoreMap := make(map[int]domain.UserScore)
-	for index, userScore := range userScoreList {
-		userScoreMap[index+1] = userScore
-		if len(userScoreMap) == rank {
-			break
-		}
-	}
+	request := requests_read.GetScoresAbsoluteRequest{Rank: rank}
+	service := services_read.GetScoresAbsoluteService{Request: request}
+	userScoreMap := services_read.Exec(service)
 	jsonUserScores, _ := json.Marshal(userScoreMap)
 	fmt.Fprintf(w, string(jsonUserScores))
 }
