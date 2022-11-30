@@ -1,8 +1,11 @@
 package tests
 
 import (
+	requests_write "Goscore/Application/Requests/Write"
 	domain "Goscore/Domain"
 	controller_read "Goscore/Infrastructure/Controllers/Read"
+	controller_write "Goscore/Infrastructure/Controllers/Write"
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -191,59 +194,59 @@ func TestGetRelativeAndThereAreNotEnoughRelatives(t *testing.T) {
 	}
 }
 
-// // WRITE
-// func TestPostFirstSaveScoreAbsolute(t *testing.T) {
-// 	url := controller_read.HOST + controller_read.URL_NEW
-// 	saveScore := requests_write.SaveScoreTotalRequest{User: 2000, Total: 20000}
-// 	saveScoreJson, _ := json.Marshal(saveScore)
-// 	res, err := client.Post(url, "application/json", bytes.NewBuffer(saveScoreJson))
-// 	if err != nil {
-// 		t.Error(err)
-// 	}
-// 	defer res.Body.Close()
-// 	if res.StatusCode != 200 {
-// 		t.Error()
-// 	}
-// }
+// WRITE
+func TestPostFirstSaveScoreTotal(t *testing.T) {
+	url := controller_write.HOST + controller_write.URL_NEW_TOTAL
+	saveScore := requests_write.SaveScoreTotalRequest{User: 2000, Total: 20000}
+	saveScoreJson, _ := json.Marshal(saveScore)
+	res, err := client.Post(url, "application/json", bytes.NewBuffer(saveScoreJson))
+	if err != nil {
+		t.Error(err)
+	}
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
+		t.Error()
+	}
+}
 
-// func TestPostUpdateScoreWithAbsolute(t *testing.T) {
-// 	url := controller_read.HOST + controller_read.URL_NEW
-// 	saveScore := requests_write.SaveScoreTotalRequest{User: 2000, Total: 20001}
-// 	saveScoreJson, _ := json.Marshal(saveScore)
-// 	res, err := client.Post(url, "application/json", bytes.NewBuffer(saveScoreJson))
-// 	if err != nil {
-// 		t.Error(err)
-// 	}
-// 	defer res.Body.Close()
-// 	if res.StatusCode != 200 {
-// 		t.Error()
-// 	}
-// }
+func TestPostUpdateScoreWithTotal(t *testing.T) {
+	url := controller_write.HOST + controller_write.URL_NEW_TOTAL
+	saveScore := requests_write.SaveScoreTotalRequest{User: 2000, Total: 20001}
+	saveScoreJson, _ := json.Marshal(saveScore)
+	res, err := client.Post(url, "application/json", bytes.NewBuffer(saveScoreJson))
+	if err != nil {
+		t.Error(err)
+	}
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
+		t.Error()
+	}
+}
 
-// func TestPostUpdateScoreWithDifferential(t *testing.T) {
-// 	url := controller_read.HOST + controller_read.URL_NEW
-// 	saveScore := requests_write.SaveScoreDiffRequest{User: 2000, Score: "+10"}
-// 	saveScoreJson, _ := json.Marshal(saveScore)
-// 	res, err := client.Post(url, "application/json", bytes.NewBuffer(saveScoreJson))
-// 	if err != nil {
-// 		t.Error(err)
-// 	}
-// 	defer res.Body.Close()
-// 	if res.StatusCode != 200 {
-// 		t.Error()
-// 	}
-// }
+func TestPostUpdateScoreWithDifferential(t *testing.T) {
+	url := controller_write.HOST + controller_write.URL_NEW_DIFFERENTIAL
+	saveScore := requests_write.SaveScoreDiffRequest{User: 2000, Score: "+10"}
+	saveScoreJson, _ := json.Marshal(saveScore)
+	res, err := client.Post(url, "application/json", bytes.NewBuffer(saveScoreJson))
+	if err != nil {
+		t.Error(err)
+	}
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
+		t.Error()
+	}
+}
 
-// func TestPostFirstSaveScoreRelative(t *testing.T) {
-// 	url := controller_read.HOST + controller_read.URL_NEW
-// 	saveScore := requests_write.SaveScoreDiffRequest{User: 3000, Score: "+30000"}
-// 	saveScoreJson, _ := json.Marshal(saveScore)
-// 	res, err := client.Post(url, "application/json", bytes.NewBuffer(saveScoreJson))
-// 	if err != nil {
-// 		t.Error(err)
-// 	}
-// 	defer res.Body.Close()
-// 	if res.StatusCode != 200 {
-// 		t.Error()
-// 	}
-// }
+func TestPostFirstSaveScoreDifferential(t *testing.T) {
+	url := controller_write.HOST + controller_write.URL_NEW_DIFFERENTIAL
+	saveScore := requests_write.SaveScoreDiffRequest{User: 3000, Score: "+30000"}
+	saveScoreJson, _ := json.Marshal(saveScore)
+	res, err := client.Post(url, "application/json", bytes.NewBuffer(saveScoreJson))
+	if err != nil {
+		t.Error(err)
+	}
+	defer res.Body.Close()
+	if res.StatusCode != 200 {
+		t.Error()
+	}
+}

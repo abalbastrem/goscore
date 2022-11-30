@@ -12,7 +12,7 @@ type GetScoresRelativeService struct {
 }
 
 func ExecRelative(s GetScoresRelativeService) map[int]domain.UserScore {
-	userScoreList := repo.GetScores()
+	userScoreList := repo.GetScoreList()
 	utils.Sort(userScoreList)
 	userScoreMap := make(map[int]domain.UserScore)
 	for index, userScore := range userScoreList {

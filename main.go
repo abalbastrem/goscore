@@ -1,9 +1,9 @@
 package main
 
 import (
-	utils "Goscore/Application/Utils"
 	domain "Goscore/Domain"
 	cr "Goscore/Infrastructure/Controllers/Read"
+	cw "Goscore/Infrastructure/Controllers/Write"
 	repo "Goscore/Infrastructure/Repos"
 	"fmt"
 	"log"
@@ -14,11 +14,13 @@ import (
 func main() {
 	fmt.Println("START")
 	populate()
-	rough()
 
 	http.HandleFunc(cr.URL_ROOT, cr.HelloWorld)
 	http.HandleFunc(cr.URL_FETCH_ABSOLUTE, cr.GetAbsoluteTop)
 	http.HandleFunc(cr.URL_FETCH_RELATIVE, cr.GetRelatives)
+
+	http.HandleFunc(cw.URL_NEW_TOTAL, cw.SaveScoreTotal)
+	http.HandleFunc(cw.URL_NEW_DIFFERENTIAL, cw.SaveScoreDifferential)
 
 	log.Println("Listening on localhost:8080")
 
@@ -30,19 +32,7 @@ func populate() {
 	for i := 1; i <= 1000; i++ {
 		score := rand.Int31()
 		userScore := domain.UserScore{User: i, Score: int(score)}
-		repo.SaveScore(userScore)
+		repo.InsertScore(userScore)
 	}
 	fmt.Println(" DONE")
-}
-
-func rough() {
-	userScoreList := repo.GetScores()
-	utils.Sort(userScoreList)
-	userScoreMap := make(map[int]domain.UserScore)
-	for index, userScore := range userScoreList {
-		if index >= 120-3 &&
-			index <= 120+3 {
-			userScoreMap[index] = userScore
-		}
-	}
 }
