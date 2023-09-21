@@ -9,7 +9,7 @@ Alternatively, build the project first with 'go build' and simply execute<br>
 _$ Goscore.exe_ in windows or<br>
 _$ ./Goscore_ in Unix systems<br>
 <br>
-The server will populate the in memory DB with a 1000 user scores and will listen to connections to localhost:8080<br>
+The server will populate the in memory DB with 1000 user scores and will listen to connections to localhost:8080<br>
 You can either throw the tests in Infrastructure/Tests with<br>
 _$ go test_<br>
 or you can do requests with your browser, curl, Postman or the like.<br>
